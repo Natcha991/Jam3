@@ -1,0 +1,520 @@
+@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&family=Exo+2:ital,wght@0,100..900;1,100..900&family=Finlandica:ital,wght@0,400..700;1,400..700&family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Lexend+Deca:wght@100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Unbounded:wght@200..900&family=Underdog&display=swap'); 
+@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&family=Exo+2:ital,wght@0,100..900;1,100..900&family=Finlandica:ital,wght@0,400..700;1,400..700&family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Lexend+Deca:wght@100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Sans+Thai:wght@100..900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Unbounded:wght@200..900&family=Underdog&display=swap'); 
+
+@import "tailwindcss";
+
+@theme {
+  --font-Unbounded: "Unbounded", sans-serif; 
+  --font-prompt: "Prompt", sans-serif;
+} 
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+/* สำหรับ WebKit browsers (Chrome, Safari, Edge) */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+/* สำหรับ Firefox */
+.scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* ป้องกัน scrollbar แนวนอนที่อาจเกิดจาก element ที่เลยขอบ */
+}
+
+/* Optional: Ensure Next.js root element fills the screen */
+#__next {
+    height: 100%; /* Make sure Next.js root element takes full height */
+}
+
+
+body {
+  background-color: #FFF6D1;
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+}
+
+@keyframes myAnim {
+	0%,
+	100% {
+		transform: rotate(0deg);
+		transform-origin: 100% 50%;
+	}
+
+	10% {
+		transform: rotate(2deg);
+	}
+
+	20%,
+	40%,
+	60% {
+		transform: rotate(-4deg);
+	}
+
+	30%,
+	50%,
+	70% {
+		transform: rotate(4deg);
+	}
+
+	80% {
+		transform: rotate(-2deg);
+	}
+
+	90% {
+		transform: rotate(2deg);
+	}
+}
+
+@keyframes myAnim2 {
+	0%,
+	100% {
+		transform: rotate(-35deg);
+		transform-origin: 100% 50%;
+	}
+
+	10% {
+		transform: rotate(2deg);
+	}
+
+	20%,
+	40%,
+	60% {
+		transform: rotate(-4deg);
+	}
+
+	30%,
+	50%,
+	70% {
+		transform: rotate(4deg);
+	}
+
+	80% {
+		transform: rotate(-2deg);
+	}
+
+	90% {
+		transform: rotate(2deg);
+	}
+}
+
+.animate-shakeright2 {
+  animation: myAnim2 13s ease 1s infinite;
+}
+
+.animate-shakeright {
+  animation: myAnim 13s ease 1s infinite;
+}
+
+.animate-wiggle {
+  animation: wiggle 1s infinite ease-in-out;
+}
+
+.animate-sizeUpdown {
+	animation: SizeUp 2s infinite ease-in-out;
+}
+
+.animate-sizeUpdown2 {
+	animation: SizeUpUp 1s infinite ease-in-out;
+}
+
+.animate-showUp {
+	animation: ShowUp 1s ease 0s 1 normal forwards;
+}
+
+.animate-Open {
+	animation: Open 2s ease 0s 1 normal forwards;
+}
+
+.animate-OpenScene {
+	animation: OpenScene 1s ease 0s 1 normal forwards;
+}
+
+.animate-OpenScene2 {
+	animation: OpenScene 3s ease 0s normal forwards;
+}
+
+@keyframes OpenScene {
+	0% {
+		animation-timing-function: ease-in;
+		opacity: 1;
+		transform: translateY(-45px);
+	}
+
+	24% {
+		opacity: 1;
+	}
+
+	40% {
+		animation-timing-function: ease-in;
+		transform: translateY(-24px);
+	}
+
+	65% {
+		animation-timing-function: ease-in;
+		transform: translateY(-12px);
+	}
+
+	82% {
+		animation-timing-function: ease-in;
+		transform: translateY(-6px);
+	}
+
+	93% {
+		animation-timing-function: ease-in;
+		transform: translateY(-4px);
+	}
+
+	25%,
+	55%,
+	75%,
+	87% {
+		animation-timing-function: ease-out;
+		transform: translateY(0px);
+	}
+
+	100% {
+		animation-timing-function: ease-out;
+		opacity: 1;
+		transform: translateY(0px);
+	}
+}
+
+@keyframes Open {
+	0% {
+		transform: scale(1);
+	}
+
+	50% {
+		transform: scale(1.1);
+	}
+
+	100% {
+		transform: scale(1);
+	}
+}
+
+
+@keyframes SizeUp { 
+	0% {
+		transform: scale(100%);
+	}
+
+	50% {
+		transform: scale(102%);
+	}
+
+	100% {
+		transform: scale(100%);
+	}
+}
+
+@keyframes ShowUp {
+	0% {
+		transform: scale3d(1, 1, 1);
+	}
+
+	30% {
+		transform: scale3d(1.25, 0.75, 1);
+	}
+
+	40% {
+		transform: scale3d(0.75, 1.25, 1);
+	}
+
+	50% {
+		transform: scale3d(1.15, 0.85, 1);
+	}
+
+	65% {
+		transform: scale3d(0.95, 1.05, 1);
+	}
+
+	75% {
+		transform: scale3d(1.05, 0.95, 1);
+	}
+
+	100% {
+		transform: scale3d(1, 1, 1);
+	}
+}
+
+@keyframes SizeUpUp { 
+	0% {
+		transform: scale(100%);
+	}
+
+	50% {
+		transform: scale(107%);
+	}
+
+	100% {
+		transform: scale(100%);
+	}
+}
+
+@keyframes dopdop { 
+	0% {
+		transform: translateY(0);
+	}
+
+	50% {
+		transform: translateY(-0.5rem);
+	}
+
+	100% {
+		transform: translateY(0);
+	}
+}
+
+.animate-dopdop {
+	animation: dopdop 4s ease-in-out infinite;
+} 
+
+.animate-press {
+    animation: button-press-animation 0.3s ease-in-out; /* ปรับ duration ให้สั้นลงเล็กน้อยเพื่อให้เข้ากับการเปลี่ยนหน้า */
+}
+
+@keyframes button-press-animation {
+    0% {
+        transform: scale(1);  /* default shadow */
+    }
+    50% {
+        transform: scale(0.95); /* Scale down slightly on press */ 
+    }
+    100% {
+        transform: scale(1); 
+    }
+}
+
+/* Optional: Add a flash effect for the button text background */
+.animate-flash-fill {
+    animation: flash-fill-animation 0.5s ease-in-out;
+}
+
+@keyframes flash-fill-animation {
+    0% {
+        background-color: transparent;
+        color: inherit;
+    }
+    20% {
+        background-color: rgba(255, 170, 0, 0.2);
+        color: #fff;
+    }
+    100% {
+        background-color: transparent;
+        color: inherit;
+    }
+	
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE/Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+/* calpage create at 14/8/2568 20:24 */
+@keyframes shakeright {
+  0%, 100% { transform: translateX(0) rotate(0); }
+  50% { transform: translateX(6px) rotate(2deg); }
+}
+@keyframes shakeright2 {
+  0%, 100% { transform: translateX(0) rotate(35deg); }
+  50% { transform: translateX(-6px) rotate(32deg); }
+}
+@keyframes sizeUpdown {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+@keyframes press {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.96); }
+  100% { transform: scale(1); }
+}
+
+.animate-shakeright { animation: shakeright 4.5s ease-in-out infinite; }
+.animate-shakeright2 { animation: shakeright2 4.5s ease-in-out infinite; }
+.animate-sizeUpdown { animation: sizeUpdown 5s ease-in-out infinite; }
+.animate-press { animation: press 380ms ease-in-out 1; }
+
+@media (hover: hover) {
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: #ffd09e; border-radius: 999px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+}
+
+/* ===== Enhanced Animations for Production-level Frontend (เพิ่มในไฟล์ globals.css) ===== */
+
+/* Float animation for floating elements */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Soft pulse effect */
+@keyframes pulse-soft {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* Slide in animations */
+@keyframes slideInFromBottom {
+  from {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Gradient shift animation */
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Fade in up animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Loading skeleton animation */
+@keyframes skeleton-loading {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+/* Utility classes */
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+.animate-slide-in-bottom {
+  animation: slideInFromBottom 0.8s ease-out forwards;
+}
+
+.animate-slide-in-right {
+  animation: slideInFromRight 0.6s ease-out forwards;
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 4s ease infinite;
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* Glass morphism effect */
+.glass-morphism {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* Enhanced hover effects */
+.card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* Loading skeleton */
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 37%, #f0f0f0 63%);
+  background-size: 400px 100%;
+  animation: skeleton-loading 1.4s ease-in-out infinite;
+}
+
+/* Glassmorphism card */
+.glass-morphism {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  border-radius: 1rem;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+}
+
+/* Card hover animation */
+.card-hover:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+}
+
+/* Pulse soft for loading badges */
+@keyframes pulse-soft {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.05); opacity: 1; }
+}
+.animate-pulse-soft {
+  animation: pulse-soft 1.5s infinite;
+}
