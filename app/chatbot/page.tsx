@@ -1,7 +1,8 @@
-// app/chatbot/page.tsx
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 type ChatMsg = {
@@ -11,9 +12,20 @@ type ChatMsg = {
 };
 
 export default function ChatPage() {
+  const router = useRouter();
+  const userId = "123";
   const [message, setMessage] = useState("");
   const [chatLog, setChatLog] = useState<ChatMsg[]>([]);
+  const [isBackAnimating, setIsBackAnimating] = useState(false);
   const chatBoxRef = useRef<HTMLDivElement>(null);
+
+  const handleGoBack = () => {
+    setIsBackAnimating(true);
+    setTimeout(() => {
+      router.push(`/home?id=${userId}`);
+      setIsBackAnimating(false);
+    }, 300);
+  };
 
   const genAI = new GoogleGenerativeAI(
     process.env.NEXT_PUBLIC_GEMINI_API_KEY ?? ""
@@ -62,38 +74,83 @@ export default function ChatPage() {
   }, [chatLog]);
 
   return (
-    <div className="p-4">
+    <div className="h-screen w-screen bg-[#FFF6D1] flex flex-col relative">
+      {/* Navigation Header */}
+      <div className="absolute z-10 flex justify-between items-center top-4 sm:top-6 md:top-8 left-4 right-4 sm:left-6 sm:right-6 md:left-8 md:right-8 lg:left-12 lg:right-12">
+        {/* ปุ่มย้อนกลับ */}
+        <div
+          onClick={handleGoBack}
+          className={`bg-white h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 mt-6 flex justify-center items-center cursor-pointer transform hover:scale-105 rounded-full shadow-2xl ${
+            isBackAnimating ? "animate-press" : ""
+          }`}
+        >
+          <Image
+            src="/image%2082.png"
+            alt="back"
+            width={24}
+            height={24}
+            style={{ objectFit: "contain" }}
+          />
+        </div>
+      </div>
+
+      {/* Title */}
+      <h1 className="text-[#333333] text-[32px] font-bold font-unbounded text-center mt-8">
+        3 Tub chat
+      </h1>
+
+      {/* Chat Box */}
       <div
         ref={chatBoxRef}
-        className="h-[70vh] overflow-y-auto border p-2 rounded"
+        className="bg-white rounded-t-[55px] p-4 shadow w-full flex flex-col overflow-y-auto flex-1 mt-6"
+        style={{ paddingBottom: "80px" }}
       >
         {chatLog.map((m, i) => (
           <div
             key={i}
-            className={m.from === "user" ? "text-right" : "text-left"}
+            className={`my-2 flex items-end ${
+              m.from === "user" ? "justify-end" : "justify-start"
+            }`}
           >
-            <div className="inline-block bg-gray-200 rounded px-2 py-1 my-1">
+            <div
+              className={`relative px-4 py-2 border border-[#C9AF90] bg-white text-[#000000] max-w-[70%] ${
+                m.from === "user"
+                  ? "rounded-tl-[17px] rounded-tr-[17px] rounded-bl-[17px] rounded-br-none"
+                  : "rounded-tl-[17px] rounded-tr-[17px] rounded-br-[17px] rounded-bl-none"
+              }`}
+            >
               {m.text}
             </div>
+            {m.from === "user" && (
+              <img
+                src="/user-avatar.png"
+                alt="user"
+                className="w-8 h-8 rounded-full ml-2"
+              />
+            )}
           </div>
         ))}
       </div>
 
-      <div className="flex gap-2 mt-3">
-        <input
-          className="flex-1 border p-1 rounded"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-        />
-        <button
-          onClick={sendMessage}
-          className="px-4 py-2 bg-blue-500 text-white rounded"
-        >
-          ส่ง
-        </button>
+      {/* Input Box */}
+      <div className="absolute bottom-0 left-0 w-full p-4 flex justify-center bg-transparent">
+        <div className="w-3/4 flex items-center gap-2">
+          <input
+            type="text"
+            className="w-full bg-[#EED9B8] rounded-[55px] p-4 outline-none focus:ring-2 focus:ring-[#C9AF90]"
+            placeholder="คุยกับนักโภชนาการของคุณ"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+          />
+          <button
+            onClick={sendMessage}
+            className="p-2 rounded-full bg-[#C9AF90] text-white"
+          >
+            ➤
+          </button>
+        </div>
       </div>
     </div>
   );
 }
-
