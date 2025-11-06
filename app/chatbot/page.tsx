@@ -1,85 +1,94 @@
+// app/chatbot/page.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-export default function ChatBotPage() {
-  const [messages, setMessages] = useState<
-    { sender: "user" | "bot"; text: string }[]
-  >([]);
-  const [input, setInput] = useState("");
-  const [loading, setLoading] = useState(false);
+type ChatMsg = {
+  from: "user" | "ai";
+  text: string;
+  timestamp: string;
+};
 
-  async function sendMessage() {
-    if (!input.trim()) return;
+export default function ChatPage() {
+  const [message, setMessage] = useState("");
+  const [chatLog, setChatLog] = useState<ChatMsg[]>([]);
+  const chatBoxRef = useRef<HTMLDivElement>(null);
 
-    const userMsg = input;
-    setInput("");
+  const genAI = new GoogleGenerativeAI(
+    process.env.NEXT_PUBLIC_GEMINI_API_KEY ?? ""
+  );
 
-    setMessages((prev) => [...prev, { sender: "user", text: userMsg }]);
+  const sendMessage = async () => {
+    if (!message) return;
 
-    try {
-      setLoading(true);
+    const userChat: ChatMsg = {
+      from: "user",
+      text: message,
+      timestamp: new Date().toLocaleTimeString(),
+    };
 
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: userMsg }),
-      });
+    setChatLog((prev) => [...prev, userChat]);
+    setMessage("");
 
-      const data = await res.json();
-      const botMsg = data?.reply ?? "ไม่สามารถตอบกลับได้";
+    const model = genAI.getGenerativeModel({
+      model: "gemini-2.5-flash",
+      systemInstruction: `
+คุณเป็นนักโภชนาการที่สุภาพ ใจดี 
+คุณเชี่ยวชาญเรื่องข้าว โดยเฉพาะข้าวกล้อง
+- ถ้าผู้ใช้ไม่ชอบเมนู ให้ถามความชอบ เช่น รสชาติ, ประเภทอาหาร หรือวัตถุดิบ
+- ตอบสั้น กระชับ ไม่เกิน 1 บรรทัด
+- แบ่งย่อหน้าให้อ่านง่าย
+`,
+    });
 
-      setMessages((prev) => [...prev, { sender: "bot", text: botMsg }]);
-    } catch (error) {
-      setMessages((prev) => [
-        ...prev,
-        { sender: "bot", text: "เกิดข้อผิดพลาด" },
-      ]);
+    const historyText = [...chatLog, userChat]
+      .map((msg) => `${msg.from === "user" ? "ผู้ใช้" : "AI"}: ${msg.text}`)
+      .join("\n");
+
+    const result = await model.generateContent(historyText);
+    const aiText = await result.response.text();
+
+    setChatLog((prev) => [
+      ...prev,
+      { from: "ai", text: aiText, timestamp: new Date().toLocaleTimeString() },
+    ]);
+  };
+
+  useEffect(() => {
+    if (chatBoxRef.current) {
+      chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
     }
-
-    setLoading(false);
-  }
-
-  function onKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key === "Enter") sendMessage();
-  }
+  }, [chatLog]);
 
   return (
-    <div className="flex flex-col h-screen p-4 bg-gray-100">
-      <h1 className="text-2xl font-bold mb-4 text-center">Chatbot</h1>
-
-      {/* Chat window */}
-      <div className="flex-1 overflow-y-auto bg-white p-4 rounded shadow">
-        {messages.map((msg, i) => (
+    <div className="p-4">
+      <div
+        ref={chatBoxRef}
+        className="h-[70vh] overflow-y-auto border p-2 rounded"
+      >
+        {chatLog.map((m, i) => (
           <div
             key={i}
-            className={`mb-2 ${
-              msg.sender === "user"
-                ? "text-right text-blue-600"
-                : "text-left text-green-600"
-            }`}
+            className={m.from === "user" ? "text-right" : "text-left"}
           >
-            <span>{msg.text}</span>
+            <div className="inline-block bg-gray-200 rounded px-2 py-1 my-1">
+              {m.text}
+            </div>
           </div>
         ))}
-
-        {loading && (
-          <div className="text-left text-gray-500 animate-pulse">...</div>
-        )}
       </div>
 
-      {/* Input */}
-      <div className="flex mt-3 gap-2">
+      <div className="flex gap-2 mt-3">
         <input
-          className="flex-1 p-2 border rounded"
-          placeholder="พิมพ์ข้อความ..."
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={onKeyDown}
+          className="flex-1 border p-1 rounded"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && sendMessage()}
         />
         <button
           onClick={sendMessage}
-          className="px-4 py-2 bg-blue-600 text-white rounded"
+          className="px-4 py-2 bg-blue-500 text-white rounded"
         >
           ส่ง
         </button>
@@ -87,3 +96,4 @@ export default function ChatBotPage() {
     </div>
   );
 }
+
