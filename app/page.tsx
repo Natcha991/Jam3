@@ -1,4 +1,3 @@
-// app/page.tsx
 "use client";
 
 import { useEffect } from "react";
@@ -8,8 +7,7 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    // redirect ไปหน้า chatbot อัตโนมัติ
-    router.replace("/chatbot");
+    router.replace("/chatbot"); // redirect หน้าแรกไป /chatbot
   }, [router]);
 
   return <div>กำลังไปหน้า Chatbot...</div>;
