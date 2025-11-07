@@ -1,7 +1,8 @@
+// app/home/HomeClientPage.tsx
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import menuData from "@/data/menu.json";
+import menuData from "@/public/menu.json";
 
 interface MenuItem {
   name: string;

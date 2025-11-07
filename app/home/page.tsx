@@ -1,8 +1,9 @@
+// app/home/page.tsx
 "use client";
 
 import Image from "next/image";
 import { Pacifico } from "next/font/google";
-import menuData from "@/data/menu.json";   // ✅ ดึงข้อมูล
+import menuData from "@/public/menu.json";   // ✅ ดึงข้อมูล
 import { useMemo } from "react";
 
 const pacifico = Pacifico({
