@@ -1,67 +1,98 @@
-// 'use client'
+import Image from "next/image";
+import fs from "fs";
+import path from "path";
 
-// export const dynamic = 'force-dynamic';
+interface MenuData {
+  id: string;
+  name: string;
+  calories: number;
+  image: string;
+}
 
-// import HomePage from './HomeClientPage';
-// import { Suspense } from 'react';
-// import { useState, useEffect } from 'react';
+export default async function MenuDetailPage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const filePath = path.join(process.cwd(), "public", "menu.json");
+  const jsonData = fs.readFileSync(filePath, "utf-8");
+  const menus: MenuData[] = JSON.parse(jsonData);
 
-// export default function Page() {
+  const menu = menus.find((item) => item.id === params.id);
 
-//   const [appHeight, setAppHeight] = useState('100vh'); // เพิ่ม state สำหรับความสูงจริงของจอ
+  if (!menu) {
+    return <div className="p-6 text-center text-red-500">Menu not found</div>;
+  }
 
-//   // Effect to calculate and set the actual viewport height for mobile browsers
-//   useEffect(() => {
-//     const updateAppHeight = () => {
-//       // Use window.visualViewport.height if available for more accurate usable height
-//       // Otherwise, fallback to window.innerHeight
-//       setAppHeight(`${window.visualViewport?.height || window.innerHeight}px`);
-//     };
+  return (
+    <div className="min-h-screen bg-[#FFF7E8] p-4">
+      {/* Header */}
+      <div className="flex justify-between items-center">
+        <div className="flex items-center gap-3">
+          <Image
+            src="/user.png"
+            width={40}
+            height={40}
+            alt="user"
+            className="rounded-full"
+          />
+          <p className="font-medium">Hi Khaokong</p>
+        </div>
 
-//     if (typeof window !== 'undefined') {
-//       updateAppHeight(); // Set initial height
-//       window.addEventListener('resize', updateAppHeight); // Add resize listener
-//       if (window.visualViewport) {
-//         window.visualViewport.addEventListener('resize', updateAppHeight); // Listen to visual viewport changes
-//       }
-//     }
+        <div className="flex flex-col items-center text-xs">
+          <Image
+            src="/icon_tub.png"
+            width={40}
+            height={40}
+            alt="tub"
+            className="rounded-full"
+          />
+          <span>3 Tub Chat</span>
+        </div>
+      </div>
 
-//     // Cleanup event listener on component unmount
-//     return () => {
-//       if (typeof window !== 'undefined') {
-//         window.removeEventListener('resize', updateAppHeight);
-//         if (window.visualViewport) {
-//           window.visualViewport.removeEventListener('resize', updateAppHeight);
-//         }
-//       }
-//     };
-//   }, []);
+      {/* Highlight Card */}
+      <div className="mt-4 bg-white rounded-2xl p-4 shadow-lg flex items-center gap-3">
+        <div className="flex-1">
+          <h1 className="text-xl font-bold">{menu.name.toUpperCase()}</h1>
+          <p className="text-gray-500">{menu.calories} kcal</p>
+        </div>
 
-//   return (
-//     <Suspense fallback={<div
-//             className="relative w-screen overflow-hidden flex flex-col items-center justify-center
-//                        bg-gradient-to-br from-orange-300 to-orange-100 text-xl text-gray-700 font-prompt"
-//             style={{ height: appHeight }} // Apply the calculated height
-//         >
-//             {/* Decoration images - ปรับขนาดด้วย w-[%] และ max-w-[] หรือ vw/vh เพื่อให้ Responsive */}
-//             {/* ปรับตำแหน่ง top/left/right ให้ยืดหยุ่นมากขึ้นด้วยหน่วย vh/vw */}
-//             <div className="absolute left-0 top-0 w-[ุ60vw] max-w-[250px]">
-//                 <img src="/Group%2099.png" alt="Decoration"></img>
-//             </div>
-//             <div className="absolute right-0 bottom-0 rotate-[180deg] top-[30vh] w-[60vw] max-w-[250px]">
-//                 <img src="/Group%2099.png" alt="Decoration"></img>
-//             </div>
-//             <div className="absolute top-[74vh] left-[3.5vw] animate-shakeright w-[30vw] max-w-[200px]">
-//                 <img className='' src="/image%2084.png" alt="Decoration"></img>
-//             </div>
-//             <div className="absolute top-[10vh] right-[5vw] rotate-[35deg] animate-shakeright2 w-[25vw] max-w-[120px]">
-//                 <img src="/image%2084.png" className='w-[140px]' alt="Decoration"></img>
-//             </div>
-//             {/* ส่วนสีพื้นหลัง (Image 69.png) - ปรับให้ใช้ max-h-[vh] และ object-contain เพื่อให้ Responsive */}
-//             <img className='animate-sizeUpdown2 mb-[1.5rem] w-auto max-h-[40vh] object-contain' src="/image%2069.png" alt="Background decoration"></img>
-//             <p className="z-10">กำลังโหลดข้อมูล...</p>
-//         </div>}>
-//       <HomePage />
-//     </Suspense>
-//   );
-// }
+        <div className="w-28 h-28 rounded-full overflow-hidden">
+          <Image
+            src={menu.image}
+            alt={menu.name}
+            width={200}
+            height={200}
+            className="object-cover"
+          />
+        </div>
+      </div>
+
+      {/* Popular Menu */}
+      <h2 className="mt-6 text-xl font-bold">popular menu</h2>
+
+      <div className="grid grid-cols-2 gap-4 mt-4">
+        {menus.map((item) => (
+          <a
+            key={item.id}
+            href={`/menu/${item.id}`}
+            className="bg-white rounded-2xl p-3 shadow-md"
+          >
+            <div className="w-full h-28 overflow-hidden rounded-xl">
+              <Image
+                src={item.image}
+                alt={item.name}
+                width={200}
+                height={200}
+                className="object-cover"
+              />
+            </div>
+            <h3 className="font-semibold mt-2">{item.name}</h3>
+            <p className="text-gray-500 text-sm">{item.calories} kcal</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  );
+}
