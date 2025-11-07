@@ -81,16 +81,14 @@ export default function ChatPage() {
         {/* ปุ่มย้อนกลับ */}
         <div
           onClick={handleGoBack}
-          className={`bg-white h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 mt-6 flex justify-center items-center cursor-pointer transform hover:scale-105 rounded-full shadow-2xl ${
-            isBackAnimating ? "animate-press" : ""
-          }`}
+          className={`bg-white h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 mt-6 flex justify-center items-center cursor-pointer transform hover:scale-105 rounded-full shadow-2xl ${isBackAnimating ? "animate-press" : ""}`}
         >
           <Image
-            src="/image%2082.png"
+            className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5"
+            src="/Group%2084.png"
             alt="back"
             width={24}
             height={24}
-            style={{ objectFit: "contain" }}
           />
         </div>
       </div>
@@ -109,33 +107,25 @@ export default function ChatPage() {
         {chatLog.map((m, i) => (
           <div
             key={i}
-            className={`my-2 flex items-end ${
-              m.from === "user" ? "justify-end" : "justify-start"
-            }`}
+            className={`my-2 flex items-end ${m.from === "user" ? "justify-end" : "justify-start"
+              }`}
           >
             <div
-              className={`relative px-4 py-2 border border-[#C9AF90] bg-white text-[#000000] max-w-[70%] ${
-                m.from === "user"
-                  ? "rounded-tl-[17px] rounded-tr-[17px] rounded-bl-[17px] rounded-br-none"
-                  : "rounded-tl-[17px] rounded-tr-[17px] rounded-br-[17px] rounded-bl-none"
-              }`}
+              className={`relative px-4 py-2 border border-[#C9AF90] bg-white text-[#000000] max-w-[70%] ${m.from === "user"
+                ? "rounded-tl-[17px] rounded-tr-[17px] rounded-bl-[17px] rounded-br-none"
+                : "rounded-tl-[17px] rounded-tr-[17px] rounded-br-[17px] rounded-bl-none"
+                }`}
             >
               {m.text}
             </div>
-            {m.from === "user" && (
-              <img
-                src="/user-avatar.png"
-                alt="user"
-                className="w-8 h-8 rounded-full ml-2"
-              />
-            )}
           </div>
         ))}
       </div>
 
+
       {/* Input Box */}
       <div className="absolute bottom-0 left-0 w-full p-4 flex justify-center bg-transparent">
-        <div className="w-3/4 flex items-center gap-2">
+        <div className="w-3/2 flex items-center gap-2">
           <input
             type="text"
             className="w-full bg-[#EED9B8] rounded-[55px] p-4 outline-none focus:ring-2 focus:ring-[#C9AF90]"
