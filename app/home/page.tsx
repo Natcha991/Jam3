@@ -1,96 +1,102 @@
+"use client";
+
 import Image from "next/image";
-import fs from "fs";
-import path from "path";
+import { Pacifico } from "next/font/google";
+import menuData from "@/data/menu.json";   // ✅ ดึงข้อมูล
+import { useMemo } from "react";
 
-interface MenuData {
-  id: string;
-  name: string;
-  calories: number;
-  image: string;
-}
+const pacifico = Pacifico({
+  weight: "400",
+  subsets: ["latin"],
+});
 
-export default async function MenuDetailPage({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const filePath = path.join(process.cwd(), "public", "menu.json");
-  const jsonData = fs.readFileSync(filePath, "utf-8");
-  const menus: MenuData[] = JSON.parse(jsonData);
+export default function HomePage() {
+  // ✅ เมนู highlight เลือกอันแรก
+  const highlight = useMemo(() => menuData[0], []);
 
-  const menu = menus.find((item) => item.id === params.id);
-
-  if (!menu) {
-    return <div className="p-6 text-center text-red-500">Menu not found</div>;
-  }
+  // ✅ เมนู popular (ทั้งหมด)
+  const popularMenu = useMemo(() => menuData, []);
 
   return (
-    <div className="min-h-screen bg-[#FFF7E8] p-4">
-      {/* Header */}
-      <div className="flex justify-between items-center">
-        <div className="flex items-center gap-3">
+    <div className="w-full min-h-screen bg-[#FFF8E7] px-4 py-6 overflow-y-auto">
+
+      {/* TOP SECTION */}
+      <div className="w-full flex items-center justify-between">
+        {/* Profile */}
+        <div className="flex flex-col items-center">
           <Image
-            src="/user.png"
+            src="/profile.png"
+            alt="profile"
             width={40}
             height={40}
-            alt="user"
             className="rounded-full"
           />
-          <p className="font-medium">Hi Khaokong</p>
+          <p className="text-sm font-medium mt-1">Hi Khaokong</p>
         </div>
 
-        <div className="flex flex-col items-center text-xs">
+        {/* 3Tub Chat icon */}
+        <div className="flex flex-col items-center">
           <Image
-            src="/icon_tub.png"
-            width={40}
-            height={40}
-            alt="tub"
-            className="rounded-full"
+            src="/cat3.png"
+            alt="chatbot"
+            width={50}
+            height={50}
           />
-          <span>3 Tub Chat</span>
+          <p className={`${pacifico.className} text-xs mt-1`}>
+            3 Tub chat
+          </p>
         </div>
       </div>
 
-      {/* Highlight Card */}
-      <div className="mt-4 bg-white rounded-2xl p-4 shadow-lg flex items-center gap-3">
-        <div className="flex-1">
-          <h1 className="text-xl font-bold">{menu.name.toUpperCase()}</h1>
-          <p className="text-gray-500">{menu.calories} kcal</p>
-        </div>
+      {/* ✅ Highlight */}
+      {highlight && (
+        <div className="w-full mt-6 bg-white rounded-2xl px-4 py-4 flex items-center shadow-md">
+          <div className="flex-1">
+            <h2 className="text-xl font-bold leading-tight">
+              {highlight.name}
+            </h2>
+            <p className="text-gray-600 text-sm mt-1">
+              {highlight.calories} kcal
+            </p>
 
-        <div className="w-28 h-28 rounded-full overflow-hidden">
+          </div>
+
           <Image
-            src={menu.image}
-            alt={menu.name}
-            width={200}
-            height={200}
-            className="object-cover"
+            src={highlight.image}
+            alt={highlight.name}
+            width={120}
+            height={120}
+            className="rounded-xl object-cover"
           />
         </div>
-      </div>
+      )}
 
-      {/* Popular Menu */}
-      <h2 className="mt-6 text-xl font-bold">popular menu</h2>
+      {/* Popular menu */}
+      <p className="mt-8 text-2xl font-bold tracking-wide">
+        popular<br />menu
+      </p>
 
-      <div className="grid grid-cols-2 gap-4 mt-4">
-        {menus.map((item) => (
-          <a
-            key={item.id}
-            href={`/menu/${item.id}`}
-            className="bg-white rounded-2xl p-3 shadow-md"
+      {/* ✅ Popular menu list */}
+      <div className="grid grid-cols-2 gap-4 mt-6 pb-8">
+        {popularMenu.map((item, index) => (
+          <div
+            key={index}
+            className="bg-white p-3 shadow-md rounded-xl flex flex-col items-center"
           >
-            <div className="w-full h-28 overflow-hidden rounded-xl">
-              <Image
-                src={item.image}
-                alt={item.name}
-                width={200}
-                height={200}
-                className="object-cover"
-              />
-            </div>
-            <h3 className="font-semibold mt-2">{item.name}</h3>
-            <p className="text-gray-500 text-sm">{item.calories} kcal</p>
-          </a>
+            <Image
+              src={item.image}
+              alt={item.name}
+              width={120}
+              height={120}
+              className="rounded-xl object-cover"
+            />
+            <p className="text-sm font-semibold mt-2">
+              {item.name}
+            </p>
+            <p className="text-xs text-gray-500 mb-1">
+              {item.calories} kcal
+            </p>
+          </div>
         ))}
       </div>
     </div>
